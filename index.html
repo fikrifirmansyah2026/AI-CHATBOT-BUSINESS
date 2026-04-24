@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Chatbot Business</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #020024, #090979, #000000);
+  color: white;
+}
+
+/* SPLASH */
+.splash {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
+  filter: drop-shadow(0 0 20px #00eaff);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  background: linear-gradient(90deg, #00eaff, #ffffff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: #ccc;
+}
+
+.btn {
+  margin-top: 30px;
+  padding: 12px 25px;
+  background: #00eaff;
+  color: black;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00eaff;
+}
+
+/* CHAT */
+.chat {
+  display: none;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.header {
+  padding: 15px;
+  background: black;
+  text-align: center;
+  border-bottom: 1px solid #222;
+}
+
+.chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.message {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 75%;
+}
+
+.user {
+  background: #00eaff;
+  color: black;
+  margin-left: auto;
+}
+
+.bot {
+  background: #111;
+  border: 1px solid #00eaff;
+}
+
+.input-box {
+  display: flex;
+  border-top: 1px solid #222;
+}
+
+input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: black;
+  color: white;
+}
+
+button {
+  padding: 10px;
+  background: #00eaff;
+  border: none;
+  cursor: pointer;
+}
+
+/* WA BUTTON */
+.wa {
+  text-align: center;
+  padding: 12px;
+  background: #25D366;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" class="logo">
+  <div class="title">AI CHATBOT BUSINESS</div>
+  <div class="subtitle">Delivery Express Selatpanjang</div>
+  <div class="btn" onclick="startApp()">Mulai Sekarang</div>
+</div>
+
+<!-- CHAT -->
+<div class="chat" id="chat">
+  <div class="header">🤖 AI Chatbot Business (24/7 Online)</div>
+
+  <div class="chat-box" id="chatBox">
+    <div class="message bot">Halo 👋 Ada yang bisa kami bantu?</div>
+  </div>
+
+  <div class="wa" onclick="openWA()">📲 Chat WhatsApp</div>
+
+  <div class="input-box">
+    <input id="input" placeholder="Tulis pesan...">
+    <button onclick="send()">Kirim</button>
+  </div>
+</div>
+
+<script>
+function startApp() {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("chat").style.display = "flex";
+}
+
+function openWA() {
+  let phone = "6283191008971";
+  let msg = "Halo, saya ingin order Delivery Express Selatpanjang";
+  window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg));
+}
+
+function send() {
+  let input = document.getElementById("input");
+  let chat = document.getElementById("chatBox");
+
+  if (input.value === "") return;
+
+  let user = document.createElement("div");
+  user.className = "message user";
+  user.innerText = input.value;
+  chat.appendChild(user);
+
+  let bot = document.createElement("div");
+  bot.className = "message bot";
+
+  let text = input.value.toLowerCase();
+
+  if (text.includes("order")) {
+    bot.innerText = "Untuk order cepat 🚀 klik WhatsApp ya.";
+    setTimeout(openWA, 1000);
+  } else if (text.includes("harga")) {
+    bot.innerText = "Harga tergantung jarak. Klik WhatsApp untuk info cepat.";
+  } else {
+    bot.innerText = "Terima kasih 😊 Silakan klik WhatsApp untuk respon cepat.";
+  }
+
+  setTimeout(() => {
+    chat.appendChild(bot);
+    chat.scrollTop = chat.scrollHeight;
+  }, 500);
+
+  input.value = "";
+}
+</script>
+
+</body>
+  </html>
