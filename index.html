@@ -157,9 +157,9 @@ function startApp() {
   document.getElementById("chat").style.display = "flex";
 }
 
-function openWA() {
+function openWA(custom = "") {
   let phone = "6283191008971";
-  let msg = "Halo, saya ingin order Delivery Express Selatpanjang";
+  let msg = custom || "Halo, saya ingin order Delivery Express Selatpanjang";
   window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg));
 }
 
@@ -167,33 +167,97 @@ function send() {
   let input = document.getElementById("input");
   let chat = document.getElementById("chatBox");
 
-  if (input.value === "") return;
+  if (input.value.trim() === "") return;
 
-  let user = document.createElement("div");
-  user.className = "message user";
-  user.innerText = input.value;
-  chat.appendChild(user);
+  let userText = input.value.toLowerCase();
 
-  let bot = document.createElement("div");
-  bot.className = "message bot";
+  addMessage(input.value, "user");
 
-  let text = input.value.toLowerCase();
-
-  if (text.includes("order")) {
-    bot.innerText = "Untuk order cepat 🚀 klik WhatsApp ya.";
-    setTimeout(openWA, 1000);
-  } else if (text.includes("harga")) {
-    bot.innerText = "Harga tergantung jarak. Klik WhatsApp untuk info cepat.";
-  } else {
-    bot.innerText = "Terima kasih 😊 Silakan klik WhatsApp untuk respon cepat.";
-  }
+  let reply = getBotReply(userText);
 
   setTimeout(() => {
-    chat.appendChild(bot);
-    chat.scrollTop = chat.scrollHeight;
-  }, 500);
+    addMessage(reply.text, "bot");
+
+    if (reply.redirectWA) {
+      setTimeout(() => openWA(reply.waText), 1500);
+    }
+
+  }, 600);
 
   input.value = "";
+}
+
+// Tambah pesan ke chat
+function addMessage(text, type) {
+  let chat = document.getElementById("chatBox");
+  let msg = document.createElement("div");
+  msg.className = "message " + type;
+  msg.innerText = text;
+  chat.appendChild(msg);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+// LOGIKA CHAT (SEMI AI)
+function getBotReply(text) {
+
+  // SAPAAN
+  if (text.includes("halo") || text.includes("hai")) {
+    return {
+      text: "Halo juga 👋\nAda yang bisa kami bantu hari ini?"
+    };
+  }
+
+  // ORDER
+  if (text.includes("order") || text.includes("pesan") || text.includes("kirim")) {
+    return {
+      text: "Siap 🚀 Kami melayani delivery express.\nSaya arahkan ke WhatsApp ya.",
+      redirectWA: true,
+      waText: "Halo, saya ingin order delivery sekarang"
+    };
+  }
+
+  // HARGA
+  if (text.includes("harga") || text.includes("biaya")) {
+    return {
+      text: "Harga tergantung jarak & layanan 📍\nKlik WhatsApp untuk cek cepat ya.",
+      redirectWA: true
+    };
+  }
+
+  // LOKASI
+  if (text.includes("lokasi") || text.includes("area")) {
+    return {
+      text: "Kami melayani area Selatpanjang dan sekitarnya 📦"
+    };
+  }
+
+  // JAM
+  if (text.includes("jam") || text.includes("buka")) {
+    return {
+      text: "Kami buka 24 jam nonstop 🔥 siap melayani kapan saja."
+    };
+  }
+
+  // LAYANAN
+  if (text.includes("layanan")) {
+    return {
+      text: "Layanan kami:\n🚚 Delivery Express\n📦 Kirim Barang\n⚡ Pengiriman Cepat"
+    };
+  }
+
+  // CEPAT / LAMA
+  if (text.includes("berapa lama") || text.includes("cepat")) {
+    return {
+      text: "Pengiriman kami cepat ⚡ tergantung jarak lokasi.\nUntuk detail, klik WhatsApp ya.",
+      redirectWA: true
+    };
+  }
+
+  // DEFAULT
+  return {
+    text: "Terima kasih 😊\nUntuk respon lebih cepat, silakan klik WhatsApp ya.",
+    redirectWA: true
+  };
 }
 </script>
 
